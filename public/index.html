@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .timer-container {
+        text-align: center;
+        width: 100%;
+      }
+      .timer {
+        font-size: 38vw;
+        margin: 0;
+        color: #333;
+      }
+      @media (min-width: 768px) {
+        .timer {
+          font-size: 15vw;
+        }
+      }
+      @media (min-width: 1200px) {
+        .timer {
+          font-size: 38vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="timer-container">
+      <p class="timer" id="timerDisplay">00:00</p>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+
+      function formatTime(seconds) {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m.toString().padStart(2, "0")}:${s
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      socket.on("timerUpdate", (data) => {
+        document.getElementById("timerDisplay").innerText = formatTime(
+          data.timer
+        );
+      });
+    </script>
+  </body>
+</html>
